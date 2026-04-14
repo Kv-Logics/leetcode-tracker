@@ -194,6 +194,23 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #1a1f2e 0%, #0d1117 100%)', display: 'flex' }}>
+      {/* Backdrop overlay when bookmark modal is open */}
+      {showBookmarkDropdown && (
+        <div 
+          onClick={() => setShowBookmarkDropdown(null)}
+          style={{ 
+            position: 'fixed', 
+            top: 0, 
+            left: 0, 
+            right: 0, 
+            bottom: 0, 
+            background: 'rgba(0, 0, 0, 0.7)', 
+            zIndex: 9999,
+            backdropFilter: 'blur(4px)'
+          }} 
+        />
+      )}
+      
       {/* Sidebar */}
       <div style={{ 
         width: sidebarOpen ? '280px' : '60px', 
@@ -202,9 +219,14 @@ export default function Home() {
         transition: 'width 0.3s',
         display: 'flex',
         flexDirection: 'column',
-        position: 'relative'
+        position: 'fixed',
+        height: '100vh',
+        left: 0,
+        top: 0,
+        zIndex: 100
       }}>
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(48, 54, 61, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Header - Fixed at top */}
+        <div style={{ padding: '1.5rem', borderBottom: '1px solid rgba(48, 54, 61, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           {sidebarOpen && <h2 style={{ color: '#c9d1d9', fontSize: '1.25rem', margin: 0, fontWeight: '600' }}>Companies</h2>}
           <button 
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -213,7 +235,76 @@ export default function Home() {
             {sidebarOpen ? '◀' : '▶'}
           </button>
         </div>
+
+        {/* Fixed buttons at top - below header */}
+        <div style={{ padding: '1rem', borderBottom: '1px solid rgba(48, 54, 61, 0.5)', flexShrink: 0 }}>
+          {sidebarOpen ? (
+            <>
+              <button 
+                onClick={() => window.location.href = '/custom'}
+                style={{ 
+                  width: '100%', 
+                  padding: '0.75rem', 
+                  background: 'rgba(210, 153, 34, 0.1)', 
+                  color: '#d29922', 
+                  border: '1px solid rgba(210, 153, 34, 0.3)', 
+                  borderRadius: '8px', 
+                  cursor: 'pointer', 
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  marginBottom: '0.5rem',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(210, 153, 34, 0.2)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(210, 153, 34, 0.1)'; }}
+              >
+                📚 My Custom Sheet
+              </button>
+              <button 
+                onClick={() => window.location.href = '/upload'}
+                style={{ 
+                  width: '100%', 
+                  padding: '0.75rem', 
+                  background: 'rgba(88, 166, 255, 0.1)', 
+                  color: '#58a6ff', 
+                  border: '1px solid rgba(88, 166, 255, 0.3)', 
+                  borderRadius: '8px', 
+                  cursor: 'pointer', 
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(88, 166, 255, 0.2)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(88, 166, 255, 0.1)'; }}
+              >
+                + Add Company
+              </button>
+            </>
+          ) : (
+            <>
+              <button 
+                onClick={() => window.location.href = '/custom'}
+                style={{ width: '100%', padding: '0.75rem', background: 'rgba(210, 153, 34, 0.1)', color: '#d29922', border: '1px solid rgba(210, 153, 34, 0.3)', borderRadius: '8px', cursor: 'pointer', fontSize: '1.25rem', marginBottom: '0.5rem', transition: 'all 0.2s' }}
+                title="My Custom Sheet"
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(210, 153, 34, 0.2)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(210, 153, 34, 0.1)'; }}
+              >
+                📚
+              </button>
+              <button 
+                onClick={() => window.location.href = '/upload'}
+                style={{ width: '100%', padding: '0.75rem', background: 'rgba(88, 166, 255, 0.1)', color: '#58a6ff', border: '1px solid rgba(88, 166, 255, 0.3)', borderRadius: '8px', cursor: 'pointer', fontSize: '1.25rem', transition: 'all 0.2s' }}
+                title="Add Company"
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(88, 166, 255, 0.2)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(88, 166, 255, 0.1)'; }}
+              >
+                +
+              </button>
+            </>
+          )}
+        </div>
         
+        {/* Scrollable company list */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
           {companies.map(company => (
             <div
@@ -252,54 +343,10 @@ export default function Home() {
             </div>
           ))}
         </div>
-
-        {sidebarOpen && (
-          <div style={{ padding: '1rem', borderTop: '1px solid rgba(48, 54, 61, 0.5)' }}>
-            <button 
-              onClick={() => window.location.href = '/custom'}
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem', 
-                background: 'rgba(210, 153, 34, 0.1)', 
-                color: '#d29922', 
-                border: '1px solid rgba(210, 153, 34, 0.3)', 
-                borderRadius: '8px', 
-                cursor: 'pointer', 
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                marginBottom: '0.5rem',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(210, 153, 34, 0.2)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(210, 153, 34, 0.1)'; }}
-            >
-              📚 My Custom Sheet
-            </button>
-            <button 
-              onClick={() => window.location.href = '/upload'}
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem', 
-                background: 'rgba(88, 166, 255, 0.1)', 
-                color: '#58a6ff', 
-                border: '1px solid rgba(88, 166, 255, 0.3)', 
-                borderRadius: '8px', 
-                cursor: 'pointer', 
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(88, 166, 255, 0.2)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(88, 166, 255, 0.1)'; }}
-            >
-              + Add Company
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginLeft: sidebarOpen ? '280px' : '60px', transition: 'margin-left 0.3s' }}>
         <nav style={{ background: 'rgba(22, 27, 34, 0.95)', padding: '1.25rem 2rem', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(48, 54, 61, 0.5)', backdropFilter: 'blur(10px)' }}>
           <h1 style={{ color: '#c9d1d9', fontSize: '1.5rem', fontWeight: '600', margin: 0 }}>🎯 {selectedCompany} Problems</h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -459,8 +506,12 @@ export default function Home() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
                 <button
-                  onClick={(e) => { e.stopPropagation(); setShowBookmarkDropdown(showBookmarkDropdown === problem.id ? null : problem.id); }}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', color: '#ffa116', opacity: 0.6, transition: 'all 0.2s', padding: '0.25rem', zIndex: 10 }}
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    e.preventDefault();
+                    setShowBookmarkDropdown(showBookmarkDropdown === problem.id ? null : problem.id); 
+                  }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', color: '#ffa116', opacity: 0.6, transition: 'all 0.2s', padding: '0.5rem', zIndex: 10 }}
                   onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1.2)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.6'; e.currentTarget.style.transform = 'scale(1)'; }}
                 >
@@ -468,43 +519,81 @@ export default function Home() {
                 </button>
                 {showBookmarkDropdown === problem.id && (
                   <div 
-                    onClick={(e) => e.stopPropagation()}
-                    onMouseEnter={(e) => e.stopPropagation()}
-                    onMouseLeave={(e) => e.stopPropagation()}
-                    style={{ position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem', background: 'rgba(22, 27, 34, 0.98)', border: '1px solid #30363d', borderRadius: '8px', padding: '0.5rem', minWidth: '200px', zIndex: 9999, boxShadow: '0 4px 16px rgba(0,0,0,0.4)', pointerEvents: 'auto' }}>
-                    <div style={{ padding: '0.5rem', borderBottom: '1px solid #30363d', marginBottom: '0.5rem' }}>
+                    onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
+                    onMouseEnter={(e) => { e.stopPropagation(); e.preventDefault(); }}
+                    onMouseLeave={(e) => { e.stopPropagation(); e.preventDefault(); }}
+                    style={{ 
+                      position: 'fixed',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      background: 'rgba(22, 27, 34, 0.98)', 
+                      border: '1px solid #30363d', 
+                      borderRadius: '8px', 
+                      padding: '1rem', 
+                      minWidth: '300px', 
+                      maxWidth: '400px',
+                      zIndex: 10000, 
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.6)', 
+                      pointerEvents: 'auto'
+                    }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid #30363d' }}>
+                      <h3 style={{ margin: 0, color: '#c9d1d9', fontSize: '1rem' }}>Add to Bookmark</h3>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setShowBookmarkDropdown(null); }}
+                        style={{ background: 'none', border: 'none', color: '#8b949e', cursor: 'pointer', fontSize: '1.5rem', padding: 0, lineHeight: 1 }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <div style={{ marginBottom: '1rem' }}>
                       {showCreateBookmark ? (
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                           <input
                             type="text"
                             placeholder="Bookmark name"
                             value={newBookmarkName}
-                            onChange={(e) => setNewBookmarkName(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && createBookmark()}
+                            onChange={(e) => { e.stopPropagation(); setNewBookmarkName(e.target.value); }}
+                            onKeyDown={(e) => { 
+                              e.stopPropagation(); 
+                              if (e.key === 'Enter') { 
+                                e.preventDefault(); 
+                                createBookmark(); 
+                              } 
+                            }}
+                            onClick={(e) => e.stopPropagation()}
                             style={{ flex: 1, padding: '0.5rem', background: '#0d1117', border: '1px solid #30363d', borderRadius: '4px', color: '#c9d1d9', fontSize: '0.875rem' }}
                             autoFocus
                           />
-                          <button onClick={createBookmark} style={{ padding: '0.5rem', background: 'rgba(35, 134, 54, 0.2)', color: '#3fb950', border: '1px solid rgba(35, 134, 54, 0.3)', borderRadius: '4px', cursor: 'pointer' }}>✓</button>
-                          <button onClick={() => { setShowCreateBookmark(false); setNewBookmarkName(''); }} style={{ padding: '0.5rem', background: 'rgba(248, 81, 73, 0.1)', color: '#f85149', border: '1px solid rgba(248, 81, 73, 0.3)', borderRadius: '4px', cursor: 'pointer' }}>✕</button>
+                          <button onClick={(e) => { e.stopPropagation(); createBookmark(); }} style={{ padding: '0.5rem 0.75rem', background: 'rgba(35, 134, 54, 0.2)', color: '#3fb950', border: '1px solid rgba(35, 134, 54, 0.3)', borderRadius: '4px', cursor: 'pointer' }}>✓</button>
+                          <button onClick={(e) => { e.stopPropagation(); setShowCreateBookmark(false); setNewBookmarkName(''); }} style={{ padding: '0.5rem 0.75rem', background: 'rgba(248, 81, 73, 0.1)', color: '#f85149', border: '1px solid rgba(248, 81, 73, 0.3)', borderRadius: '4px', cursor: 'pointer' }}>✕</button>
                         </div>
                       ) : (
-                        <button onClick={() => setShowCreateBookmark(true)} style={{ width: '100%', padding: '0.5rem', background: 'rgba(88, 166, 255, 0.1)', color: '#58a6ff', border: '1px solid rgba(88, 166, 255, 0.3)', borderRadius: '6px', cursor: 'pointer', fontSize: '0.875rem' }}>
+                        <button onClick={(e) => { e.stopPropagation(); setShowCreateBookmark(true); }} style={{ width: '100%', padding: '0.75rem', background: 'rgba(88, 166, 255, 0.1)', color: '#58a6ff', border: '1px solid rgba(88, 166, 255, 0.3)', borderRadius: '6px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: '500' }}>
                           + New Bookmark
                         </button>
                       )}
                     </div>
-                    {bookmarks.length === 0 ? (
-                      <div style={{ padding: '1rem', textAlign: 'center', color: '#8b949e', fontSize: '0.875rem' }}>No bookmarks yet</div>
-                    ) : (
-                      bookmarks.map(bookmark => (
-                        <div key={bookmark.id} style={{ padding: '0.5rem', cursor: 'pointer', borderRadius: '4px', transition: 'background 0.2s', color: '#c9d1d9', fontSize: '0.875rem' }}
-                          onClick={(e) => { e.stopPropagation(); addToBookmark(bookmark.id, problem.id); }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(88, 166, 255, 0.1)'}
-                          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
-                          {isInBookmark(problem.id, bookmark.id) ? '✓ ' : ''}{bookmark.name}
+                    <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                      {bookmarks.length === 0 ? (
+                        <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#8b949e', fontSize: '0.875rem' }}>
+                          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📑</div>
+                          No bookmarks yet
                         </div>
-                      ))
-                    )}
+                      ) : (
+                        bookmarks.map(bookmark => (
+                          <div 
+                            key={bookmark.id} 
+                            style={{ padding: '0.75rem', cursor: 'pointer', borderRadius: '6px', transition: 'background 0.2s', color: '#c9d1d9', fontSize: '0.875rem', marginBottom: '0.5rem', border: '1px solid transparent' }}
+                            onClick={(e) => { e.stopPropagation(); addToBookmark(bookmark.id, problem.id); }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(88, 166, 255, 0.1)'; e.currentTarget.style.borderColor = 'rgba(88, 166, 255, 0.3)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'transparent'; }}>
+                            <span style={{ marginRight: '0.5rem' }}>{isInBookmark(problem.id, bookmark.id) ? '✓' : '○'}</span>
+                            {bookmark.name}
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
