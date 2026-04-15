@@ -33,5 +33,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# CSV files (optional - remove if you want to commit them)
-*.csv
+# CSV files (Committed for production data import)
+# *.csv
+
