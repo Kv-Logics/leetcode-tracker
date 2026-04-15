@@ -236,9 +236,10 @@ export default function CustomSheetPage() {
                   </a>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
-                  <button onClick={() => router.push(`/custom/${problem.id}`)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', filter: 'grayscale(1)', opacity: 0.7, transition: 'all 0.2s' }} onMouseEnter={(e) => {e.currentTarget.style.filter='grayscale(0)'; e.currentTarget.style.opacity=1;}} onMouseLeave={(e) => {e.currentTarget.style.filter='grayscale(1)'; e.currentTarget.style.opacity=0.7;}}>📝</button>
-                  <button onClick={() => deleteProblem(problem.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', filter: 'grayscale(1)', opacity: 0.7, transition: 'all 0.2s' }} onMouseEnter={(e) => {e.currentTarget.style.filter='grayscale(0)'; e.currentTarget.style.opacity=1;}} onMouseLeave={(e) => {e.currentTarget.style.filter='grayscale(1)'; e.currentTarget.style.opacity=0.7;}}>🗑️</button>
+                  <button onClick={() => router.push(`/custom/${problem.id}`)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', filter: 'grayscale(1)', opacity: 0.7, transition: 'all 0.2s' }} onMouseEnter={(e) => {e.currentTarget.style.filter='grayscale(0)'; e.currentTarget.style.opacity='1';}} onMouseLeave={(e) => {e.currentTarget.style.filter='grayscale(1)'; e.currentTarget.style.opacity='0.7';}}>📝</button>
+                  <button onClick={() => deleteProblem(problem.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', filter: 'grayscale(1)', opacity: 0.7, transition: 'all 0.2s' }} onMouseEnter={(e) => {e.currentTarget.style.filter='grayscale(0)'; e.currentTarget.style.opacity='1';}} onMouseLeave={(e) => {e.currentTarget.style.filter='grayscale(1)'; e.currentTarget.style.opacity='0.7';}}>🗑️</button>
                 </div>
+
               </div>
             ))
           )}
