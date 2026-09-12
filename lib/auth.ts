@@ -18,7 +18,7 @@ export const verifyPassword = async (password: string, hash: string) => {
 };
 
 export const generateToken = (user: User) => {
-  return jwt.sign(user, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(user, JWT_SECRET, { expiresIn: '30d' });
 };
 
 export const verifyToken = (token: string): User | null => {
