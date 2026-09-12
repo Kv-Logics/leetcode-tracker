@@ -18,16 +18,28 @@ export default function Home() {
   const [showBookmarkDropdown, setShowBookmarkDropdown] = useState<string | null>(null);
   const [showCreateBookmark, setShowCreateBookmark] = useState(false);
   const [newBookmarkName, setNewBookmarkName] = useState('');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
+    const savedTheme = (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     if (savedToken && savedUser) {
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
       fetchCompanies(savedToken);
     }
   }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    localStorage.setItem('theme', nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+  };
 
   useEffect(() => {
     if (token && selectedCompany) {
@@ -143,11 +155,16 @@ export default function Home() {
   const completedCount = Object.values(completed).filter(Boolean).length;
   const progressPercent = problems.length > 0 ? Math.round((completedCount / problems.length) * 100) : 0;
 
-  // Eye Protection Dark Login Screen
+  // Login Screen
   if (!token) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)', padding: '20px' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)', padding: '20px' }}>
         <div className="saas-card" style={{ padding: '2.5rem', width: '100%', maxWidth: '400px' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+            <button onClick={toggleTheme} className="theme-toggle-btn">
+              {theme === 'dark' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+            </button>
+          </div>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ width: '48px', height: '48px', background: 'var(--primary-light)', borderRadius: '12px', color: 'var(--primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 800, marginBottom: '12px' }}>
               ⚡
@@ -193,10 +210,10 @@ export default function Home() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-dark)', color: 'var(--text-main)', display: 'flex' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-main)', color: 'var(--text-main)', display: 'flex' }}>
       
-      {/* Eye Protection Dark Sidebar */}
-      <div style={{ width: '68px', background: 'var(--bg-card)', borderRight: '1px solid var(--border-dark)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', zIndex: 100 }}>
+      {/* Sidebar */}
+      <div style={{ width: '68px', background: 'var(--bg-card)', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', zIndex: 100 }}>
         <div style={{ width: '40px', height: '40px', background: 'var(--primary)', borderRadius: '10px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '24px' }}>
           ⚡
         </div>
@@ -209,7 +226,7 @@ export default function Home() {
         <button onClick={logout} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', cursor: 'pointer', fontSize: '18px' }} title="Logout">🚪</button>
       </div>
 
-      {/* Main Eye-Protection Dashboard Workspace */}
+      {/* Main Workspace Layout */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>
         
         {/* Header Navigation */}
@@ -225,13 +242,18 @@ export default function Home() {
           </div>
           
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            {/* UI Theme Switch Button */}
+            <button onClick={toggleTheme} className="theme-toggle-btn">
+              {theme === 'dark' ? '🌙 Dark Eye-Care' : '☀️ Light SaaS'}
+            </button>
+
             <input
               type="text"
               className="saas-input"
               placeholder="Search problems..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: '240px' }}
+              style={{ width: '220px' }}
             />
             <button onClick={() => window.location.href = '/upload'} className="saas-btn-primary">
               + Create Campaign Sheet
@@ -241,7 +263,7 @@ export default function Home() {
 
         {/* Filter Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', gap: '8px', background: 'var(--bg-card)', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-dark)' }}>
+          <div style={{ display: 'flex', gap: '8px', background: 'var(--bg-card)', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
             {['All', 'Easy', 'Medium', 'Hard'].map((diff) => (
               <button
                 key={diff}
@@ -275,7 +297,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 3 Dark Eye-Care Metric Cards */}
+        {/* 3 Metric Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '28px' }}>
           
           <div className="saas-card" style={{ padding: '20px' }}>
@@ -307,9 +329,9 @@ export default function Home() {
 
         </div>
 
-        {/* Recent Problems Dark SaaS Data Table */}
+        {/* Data Table */}
         <div className="saas-card" style={{ overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border-dark)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>Target Questions</h3>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>Track progress for active campaigns.</p>
@@ -320,7 +342,7 @@ export default function Home() {
           </div>
 
           {/* Table Header */}
-          <div style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 140px 80px 60px 60px', padding: '12px 24px', background: '#0f172a', borderBottom: '1px solid var(--border-dark)', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 140px 80px 60px 60px', padding: '12px 24px', background: 'var(--bg-card-hover)', borderBottom: '1px solid var(--border-color)', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
             <div style={{ textAlign: 'center' }}>DONE</div>
             <div>#ID</div>
             <div>PROBLEM TITLE</div>
@@ -338,9 +360,9 @@ export default function Home() {
                 display: 'grid',
                 gridTemplateColumns: '60px 80px 1fr 140px 80px 60px 60px',
                 padding: '14px 24px',
-                borderBottom: '1px solid var(--border-dark)',
+                borderBottom: '1px solid var(--border-color)',
                 alignItems: 'center',
-                background: completed[problem.id] ? 'rgba(15, 23, 42, 0.4)' : 'transparent'
+                background: completed[problem.id] ? 'var(--bg-card-hover)' : 'transparent'
               }}
             >
               <div style={{ textAlign: 'center' }}>
