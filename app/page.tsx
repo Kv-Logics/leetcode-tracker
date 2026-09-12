@@ -18,7 +18,6 @@ export default function Home() {
   const [showBookmarkDropdown, setShowBookmarkDropdown] = useState<string | null>(null);
   const [showCreateBookmark, setShowCreateBookmark] = useState(false);
   const [newBookmarkName, setNewBookmarkName] = useState('');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
@@ -71,13 +70,6 @@ export default function Home() {
     });
     fetchBookmarks(token);
     setShowBookmarkDropdown(null);
-  };
-
-  const isInBookmark = (problemId: string, bookmarkId: string) => {
-    const bookmark = bookmarks.find(b => b.id === bookmarkId);
-    return bookmark?.bookmark_items?.some((item: any) => 
-      item.problem_id === problemId && item.company_name === selectedCompany
-    );
   };
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -151,21 +143,21 @@ export default function Home() {
   const completedCount = Object.values(completed).filter(Boolean).length;
   const progressPercent = problems.length > 0 ? Math.round((completedCount / problems.length) * 100) : 0;
 
-  // Login Screen
+  // Eye Protection Dark Login Screen
   if (!token) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f4f5fa', padding: '20px' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-dark)', padding: '20px' }}>
         <div className="saas-card" style={{ padding: '2.5rem', width: '100%', maxWidth: '400px' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ width: '48px', height: '48px', background: 'var(--primary-light)', borderRadius: '12px', color: 'var(--primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 800, marginBottom: '12px' }}>
               ⚡
             </div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0f172a', margin: 0 }}>adflux.com</h1>
-            <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '4px' }}>{isLogin ? 'Sign in to your dashboard' : 'Create an account to track DSA'}</p>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>adflux.com</h1>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '4px' }}>{isLogin ? 'Sign in to your dashboard' : 'Create an account to track DSA'}</p>
           </div>
           <form onSubmit={handleAuth}>
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '6px', letterSpacing: '0.05em' }}>USERNAME</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '6px', letterSpacing: '0.05em' }}>USERNAME</label>
               <input
                 type="text"
                 className="saas-input"
@@ -176,7 +168,7 @@ export default function Home() {
               />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '6px', letterSpacing: '0.05em' }}>PASSWORD</label>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '6px', letterSpacing: '0.05em' }}>PASSWORD</label>
               <input
                 type="password"
                 className="saas-input"
@@ -201,34 +193,34 @@ export default function Home() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f4f5fa', display: 'flex' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-dark)', color: 'var(--text-main)', display: 'flex' }}>
       
-      {/* Icon Sidebar (Ref image style) */}
-      <div style={{ width: '68px', background: '#ffffff', borderRight: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', zIndex: 100 }}>
+      {/* Eye Protection Dark Sidebar */}
+      <div style={{ width: '68px', background: 'var(--bg-card)', borderRight: '1px solid var(--border-dark)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', zIndex: 100 }}>
         <div style={{ width: '40px', height: '40px', background: 'var(--primary)', borderRadius: '10px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '24px' }}>
           ⚡
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
           <button onClick={() => window.location.href = '/'} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'var(--primary-light)', color: 'var(--primary)', cursor: 'pointer', fontSize: '18px' }} title="Dashboard">📊</button>
-          <button onClick={() => window.location.href = '/custom'} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'transparent', color: '#64748b', cursor: 'pointer', fontSize: '18px' }} title="My Custom Sheet">📚</button>
-          <button onClick={() => window.location.href = '/upload'} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'transparent', color: '#64748b', cursor: 'pointer', fontSize: '18px' }} title="Add Company">➕</button>
-          <button onClick={() => window.location.href = '/leetcode-all'} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'transparent', color: '#64748b', cursor: 'pointer', fontSize: '18px' }} title="All Problems">🔍</button>
+          <button onClick={() => window.location.href = '/custom'} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '18px' }} title="My Custom Sheet">📚</button>
+          <button onClick={() => window.location.href = '/upload'} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '18px' }} title="Add Company">➕</button>
+          <button onClick={() => window.location.href = '/leetcode-all'} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '18px' }} title="All Problems">🔍</button>
         </div>
-        <button onClick={logout} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: '#fef2f2', color: '#ef4444', cursor: 'pointer', fontSize: '18px' }} title="Logout">🚪</button>
+        <button onClick={logout} style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', cursor: 'pointer', fontSize: '18px' }} title="Logout">🚪</button>
       </div>
 
-      {/* Main Workspace Layout */}
+      {/* Main Eye-Protection Dashboard Workspace */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>
         
-        {/* Top Header Navigation */}
+        {/* Header Navigation */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <div>
-            <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600, display: 'flex', gap: '6px', alignItems: 'center' }}>
-              <span>Campaigns</span> › <span>Overview</span> › <span style={{ color: '#0f172a' }}>{selectedCompany} Strategy</span>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontWeight: 600, display: 'flex', gap: '6px', alignItems: 'center' }}>
+              <span>Campaigns</span> › <span>Overview</span> › <span style={{ color: 'var(--text-main)' }}>{selectedCompany} Strategy</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
-              <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>{selectedCompany} Sheet</h1>
-              <span style={{ background: '#ecfdf5', color: '#10b981', padding: '3px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700 }}>Active</span>
+              <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>{selectedCompany} Sheet</h1>
+              <span style={{ background: 'var(--easy-bg)', color: 'var(--easy)', padding: '3px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 700 }}>Active</span>
             </div>
           </div>
           
@@ -247,9 +239,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Filters Pill Bar */}
+        {/* Filter Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', gap: '8px', background: '#ffffff', padding: '4px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+          <div style={{ display: 'flex', gap: '8px', background: 'var(--bg-card)', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-dark)' }}>
             {['All', 'Easy', 'Medium', 'Hard'].map((diff) => (
               <button
                 key={diff}
@@ -259,7 +251,7 @@ export default function Home() {
                   borderRadius: '8px',
                   border: 'none',
                   background: difficultyFilter === diff ? 'var(--primary-light)' : 'transparent',
-                  color: difficultyFilter === diff ? 'var(--primary)' : '#64748b',
+                  color: difficultyFilter === diff ? 'var(--primary)' : 'var(--text-muted)',
                   fontWeight: difficultyFilter === diff ? 700 : 500,
                   fontSize: '0.85rem',
                   cursor: 'pointer'
@@ -270,9 +262,8 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Company Selector Dropdown */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>Company Target:</span>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Company Target:</span>
             <select
               className="saas-input"
               value={selectedCompany}
@@ -284,44 +275,44 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 3 Metric Hero Cards (Reference Image Layout) */}
+        {/* 3 Dark Eye-Care Metric Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '28px' }}>
           
           <div className="saas-card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Total Problems</span>
-              <span style={{ background: '#ecfdf5', color: '#10b981', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>100% Target</span>
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>Total Problems</span>
+              <span style={{ background: 'var(--easy-bg)', color: 'var(--easy)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>100% Target</span>
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 2px 0' }}>{problems.length}</div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Loaded for {selectedCompany}</div>
+            <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', margin: '8px 0 2px 0' }}>{problems.length}</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Loaded for {selectedCompany}</div>
           </div>
 
           <div className="saas-card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Solved Conversion</span>
-              <span style={{ background: '#ecfdf5', color: '#10b981', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>{progressPercent}% Complete</span>
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>Solved Conversion</span>
+              <span style={{ background: 'var(--easy-bg)', color: 'var(--easy)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>{progressPercent}% Complete</span>
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 2px 0' }}>{completedCount}</div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>from {problems.length} total questions</div>
+            <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', margin: '8px 0 2px 0' }}>{completedCount}</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>from {problems.length} total questions</div>
           </div>
 
           <div className="saas-card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Remaining Target</span>
-              <span style={{ background: '#fffbeb', color: '#f59e0b', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>In Progress</span>
+              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>Remaining Target</span>
+              <span style={{ background: 'var(--medium-bg)', color: 'var(--medium)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>In Progress</span>
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', margin: '8px 0 2px 0' }}>{problems.length - completedCount}</div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>questions remaining to solve</div>
+            <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', margin: '8px 0 2px 0' }}>{problems.length - completedCount}</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>questions remaining to solve</div>
           </div>
 
         </div>
 
-        {/* Recent Problems SaaS Data Table */}
+        {/* Recent Problems Dark SaaS Data Table */}
         <div className="saas-card" style={{ overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border-dark)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>Target Questions</h3>
-              <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '2px 0 0 0' }}>Track progress for active campaigns.</p>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>Target Questions</h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>Track progress for active campaigns.</p>
             </div>
             <span style={{ background: 'var(--primary-light)', color: 'var(--primary)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700 }}>
               {filteredProblems.length} Items
@@ -329,7 +320,7 @@ export default function Home() {
           </div>
 
           {/* Table Header */}
-          <div style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 140px 80px 60px 60px', padding: '12px 24px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 140px 80px 60px 60px', padding: '12px 24px', background: '#0f172a', borderBottom: '1px solid var(--border-dark)', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
             <div style={{ textAlign: 'center' }}>DONE</div>
             <div>#ID</div>
             <div>PROBLEM TITLE</div>
@@ -347,9 +338,9 @@ export default function Home() {
                 display: 'grid',
                 gridTemplateColumns: '60px 80px 1fr 140px 80px 60px 60px',
                 padding: '14px 24px',
-                borderBottom: '1px solid #f1f5f9',
+                borderBottom: '1px solid var(--border-dark)',
                 alignItems: 'center',
-                background: completed[problem.id] ? '#f8fafc' : '#ffffff'
+                background: completed[problem.id] ? 'rgba(15, 23, 42, 0.4)' : 'transparent'
               }}
             >
               <div style={{ textAlign: 'center' }}>
@@ -360,8 +351,8 @@ export default function Home() {
                   style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: 'var(--primary)' }}
                 />
               </div>
-              <div style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: 600 }}>#{problem.id}</div>
-              <div style={{ fontWeight: 600, color: completed[problem.id] ? '#94a3b8' : '#0f172a', textDecoration: completed[problem.id] ? 'line-through' : 'none' }}>
+              <div style={{ color: 'var(--text-dim)', fontSize: '0.85rem', fontWeight: 600 }}>#{problem.id}</div>
+              <div style={{ fontWeight: 600, color: completed[problem.id] ? 'var(--text-dim)' : 'var(--text-main)', textDecoration: completed[problem.id] ? 'line-through' : 'none' }}>
                 {problem.title}
               </div>
               <div>

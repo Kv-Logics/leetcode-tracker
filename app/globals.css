@@ -1,25 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg-light: #f4f5fa;
-  --bg-card: #ffffff;
-  --border-light: #e5e7eb;
-  --border-hover: #d1d5db;
+  --bg-dark: #0b0f19;
+  --bg-card: #131b2e;
+  --bg-card-hover: #1c2742;
+  --border-dark: #1e293b;
+  --border-hover: #334155;
   
-  --primary: #7c3aed;
-  --primary-light: #f3e8ff;
-  --primary-hover: #6d28d9;
+  --primary: #8b5cf6;
+  --primary-light: rgba(139, 92, 246, 0.15);
+  --primary-hover: #7c3aed;
   
-  --text-main: #111827;
-  --text-muted: #6b7280;
-  --text-dim: #9ca3af;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
 
   --easy: #10b981;
-  --easy-bg: #ecfdf5;
+  --easy-bg: rgba(16, 185, 129, 0.12);
   --medium: #f59e0b;
-  --medium-bg: #fffbeb;
+  --medium-bg: rgba(245, 158, 11, 0.12);
   --hard: #ef4444;
-  --hard-bg: #fef2f2;
+  --hard-bg: rgba(239, 68, 68, 0.12);
 
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
@@ -31,44 +32,48 @@
 }
 
 body {
-  background-color: var(--bg-light);
+  background-color: var(--bg-dark);
   color: var(--text-main);
   font-family: var(--font-sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar */
+/* Dark Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-light);
+  background: var(--bg-dark);
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #1e293b;
   border-radius: 4px;
 }
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
 
-/* Light SaaS Cards */
+/* Dark SaaS Cards with Eye-Care Contrast */
 .saas-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dark);
   border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
 }
 
 .saas-card:hover {
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  border-color: var(--border-hover);
+  box-shadow: 0 6px 24px -5px rgba(139, 92, 246, 0.12);
 }
 
 /* Inputs & Controls */
 .saas-input {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  color: #0f172a;
+  background: #0f172a;
+  border: 1px solid var(--border-dark);
+  color: var(--text-main);
   padding: 9px 14px;
   border-radius: 10px;
   font-size: 14px;
@@ -78,12 +83,12 @@ body {
 
 .saas-input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
 }
 
 /* Buttons */
 .saas-btn-primary {
-  background: var(--primary);
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
   color: #ffffff;
   font-weight: 600;
   padding: 9px 18px;
@@ -91,7 +96,7 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -99,14 +104,15 @@ body {
 }
 
 .saas-btn-primary:hover {
-  background: var(--primary-hover);
+  opacity: 0.95;
   transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.45);
 }
 
 .saas-btn-secondary {
-  background: #ffffff;
-  color: #334155;
-  border: 1px solid #cbd5e1;
+  background: #0f172a;
+  color: var(--text-muted);
+  border: 1px solid var(--border-dark);
   font-weight: 500;
   padding: 8px 14px;
   border-radius: 10px;
@@ -116,25 +122,26 @@ body {
 }
 
 .saas-btn-secondary:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
+  background: #1e293b;
+  color: var(--text-main);
+  border-color: var(--border-hover);
 }
 
 /* Pill Badges */
 .badge-easy {
   background: var(--easy-bg);
   color: var(--easy);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .badge-medium {
   background: var(--medium-bg);
   color: var(--medium);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .badge-hard {
   background: var(--hard-bg);
   color: var(--hard);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
