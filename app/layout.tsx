@@ -1,6 +1,8 @@
+import './globals.css';
+
 export const metadata = {
-  title: 'LeetCode Tracker',
-  description: 'Track your LeetCode progress',
+  title: 'LeetCode Tracker | SaaS Dashboard',
+  description: 'Track your LeetCode progress with modern analytics',
 }
 
 export default function RootLayout({
@@ -10,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, fontFamily: 'system-ui, -apple-system, sans-serif' }}>{children}</body>
+      <body>{children}</body>
     </html>
   )
 }

@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 export default function CustomSheetPage() {
   const router = useRouter();
@@ -108,138 +107,113 @@ export default function CustomSheetPage() {
     fetchProblems(token);
   };
 
+  const completedCount = problems.filter(p => p.completed).length;
+
   return (
-    <div style={{ minHeight: '100vh', background: '#000000', padding: '2rem' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <button onClick={() => router.push('/')} style={{ padding: '0.5rem 1rem', background: '#0d1117', color: '#58a6ff', border: '1px solid #30363d', borderRadius: '8px', cursor: 'pointer', fontSize: '0.875rem' }}>
-              ← Back to Home
-            </button>
-            <h1 style={{ color: '#ffffff', fontSize: '1.75rem', margin: 0, fontWeight: '600' }}>📚 My Custom Sheet</h1>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-dark)', color: 'var(--text-main)' }}>
+      {/* Header */}
+      <nav style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '1rem 2rem', borderBottom: '1px solid var(--border-color)', backdropFilter: 'blur(12px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <button onClick={() => router.push('/')} className="saas-button-secondary">◀ Back to Dashboard</button>
+          <h1 className="font-heading" style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>📚</span> My Custom Sheet
+          </h1>
+        </div>
+        <button onClick={() => setShowAddForm(true)} className="saas-button">+ Add Problem by ID</button>
+      </nav>
+
+      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          <div className="glass-card" style={{ padding: '1.25rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>CUSTOM PROBLEMS</div>
+            <div className="font-heading" style={{ fontSize: '2rem', fontWeight: 700, color: '#fff' }}>{problems.length}</div>
           </div>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <button
-              onClick={() => setShowAddForm(true)}
-              style={{ padding: '0.75rem 1.5rem', background: 'linear-gradient(135deg, #238636 0%, #2ea043 100%)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: '600', transition: 'transform 0.2s', boxShadow: '0 4px 12px rgba(35, 134, 54, 0.2)' }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              + Add New Problem
-            </button>
+          <div className="glass-card" style={{ padding: '1.25rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>SOLVED</div>
+            <div className="font-heading" style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--easy)' }}>{completedCount}</div>
           </div>
         </div>
 
+        {/* Add Modal */}
         {showAddForm && (
-          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '2rem', backdropFilter: 'blur(4px)' }}>
-            <div style={{ background: '#161b22', padding: '2rem', borderRadius: '12px', border: '1px solid #30363d', maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
-              <h2 style={{ color: '#ffffff', fontSize: '1.5rem', marginBottom: '1.5rem', margin: 0 }}>Add New Problem</h2>
-              <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '1.25rem' }}>
-                  <label style={{ display: 'block', color: '#8b949e', fontSize: '0.875rem', marginBottom: '0.5rem', fontWeight: '500' }}>Problem ID (Required)</label>
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+            <div className="glass-panel" style={{ width: '100%', maxWidth: '500px', padding: '2rem', background: 'var(--bg-card)' }}>
+              <h2 className="font-heading" style={{ fontSize: '1.25rem', marginBottom: '1rem', color: '#fff' }}>Add Problem to Custom Sheet</h2>
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>LeetCode Problem ID</label>
                   <input
                     type="text"
+                    className="saas-input"
+                    placeholder="e.g. 1, 42, 121"
                     value={formData.problemId}
                     onChange={(e) => setFormData({ ...formData, problemId: e.target.value })}
+                    style={{ width: '100%' }}
                     required
-                    placeholder="e.g., 1, 2, 3..."
-                    style={{ width: '100%', padding: '0.875rem', background: '#010409', border: '1px solid #30363d', borderRadius: '8px', color: '#f0f6fc', outline: 'none' }}
                   />
                 </div>
-
-                <div style={{ marginBottom: '1.25rem' }}>
-                  <label style={{ display: 'block', color: '#8b949e', fontSize: '0.875rem', marginBottom: '0.5rem', fontWeight: '500' }}>Notes/Approach (Optional)</label>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Notes (Optional)</label>
                   <textarea
+                    className="saas-input"
+                    rows={3}
+                    placeholder="Key concepts or approaches..."
                     value={formData.note}
                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                    placeholder="Describe your approach..."
-                    style={{ width: '100%', minHeight: '100px', padding: '0.875rem', background: '#010409', border: '1px solid #30363d', borderRadius: '8px', color: '#f0f6fc', resize: 'vertical', outline: 'none' }}
+                    style={{ width: '100%', fontFamily: 'inherit' }}
                   />
                 </div>
-
-                <div style={{ marginBottom: '1.25rem' }}>
-                  <label style={{ display: 'block', color: '#8b949e', fontSize: '0.875rem', marginBottom: '0.5rem', fontWeight: '500' }}>Language</label>
-                  <select
-                    value={formData.language}
-                    onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-                    style={{ width: '100%', padding: '0.875rem', background: '#010409', border: '1px solid #30363d', borderRadius: '8px', color: '#f0f6fc', outline: 'none' }}
-                  >
-                    <option value="javascript">JavaScript</option>
-                    <option value="python">Python</option>
-                    <option value="java">Java</option>
-                    <option value="cpp">C++</option>
-                  </select>
-                </div>
-
-                <div style={{ marginBottom: '2rem' }}>
-                  <label style={{ display: 'block', color: '#8b949e', fontSize: '0.875rem', marginBottom: '0.5rem', fontWeight: '500' }}>Code Solution (Optional)</label>
-                  <textarea
-                    value={formData.code}
-                    onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                    placeholder="Paste code here..."
-                    style={{ width: '100%', minHeight: '150px', padding: '0.875rem', background: '#010409', border: '1px solid #30363d', borderRadius: '8px', color: '#fbfbfb', fontFamily: 'monospace', outline: 'none' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <button type="submit" style={{ flex: 1, padding: '0.875rem', background: 'linear-gradient(135deg, #238636 0%, #2ea043 100%)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.95rem' }}>Add Problem</button>
-                  <button type="button" onClick={() => setShowAddForm(false)} style={{ flex: 1, padding: '0.875rem', background: 'rgba(248, 81, 73, 0.1)', color: '#f85149', border: '1px solid rgba(248, 81, 73, 0.3)', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '0.95rem' }}>Cancel</button>
+                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                  <button type="button" onClick={() => setShowAddForm(false)} className="saas-button-secondary">Cancel</button>
+                  <button type="submit" className="saas-button">Add Problem</button>
                 </div>
               </form>
             </div>
           </div>
         )}
 
-        <div style={{ background: '#0d1117', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.5)', border: '1px solid #30363d', overflow: 'hidden' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 120px 150px 70px 70px', padding: '1.25rem 1.5rem', borderBottom: '1px solid #30363d', background: '#161b22', fontWeight: '600', color: '#8b949e', fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            <div style={{ textAlign: 'center' }}>✓</div>
-            <div>ID</div>
-            <div>Problem</div>
-            <div>Difficulty</div>
-            <div>Category</div>
-            <div style={{ textAlign: 'center' }}>Link</div>
-            <div style={{ textAlign: 'center' }}>Actions</div>
+        {/* Table */}
+        <div className="glass-card" style={{ overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 120px 80px 80px', padding: '14px 20px', background: 'rgba(15, 23, 42, 0.8)', borderBottom: '1px solid var(--border-color)', fontWeight: 600, color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+            <div style={{ textAlign: 'center' }}>STATUS</div>
+            <div>#ID</div>
+            <div>TITLE</div>
+            <div>DIFFICULTY</div>
+            <div style={{ textAlign: 'center' }}>LINK</div>
+            <div style={{ textAlign: 'center' }}>ACTION</div>
           </div>
+
           {problems.length === 0 ? (
-            <div style={{ padding: '4rem', textAlign: 'center', color: '#8b949e' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📋</div>
-              <p style={{ fontSize: '1.1rem' }}>No custom problems yet.</p>
-              <button onClick={() => setShowAddForm(true)} style={{ marginTop: '1rem', background: 'none', border: 'none', color: '#58a6ff', cursor: 'pointer', textDecoration: 'underline' }}>Add your first problem</button>
+            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+              No custom problems added yet. Click "+ Add Problem by ID" to build your sheet!
             </div>
           ) : (
-            problems.map((problem) => (
-              <div key={problem.id} style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 120px 150px 70px 70px', padding: '1.25rem 1.5rem', borderBottom: '1px solid #21262d', alignItems: 'center', transition: 'background 0.2s' }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#161b22'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <input type="checkbox" checked={problem.completed || false} onChange={() => toggleComplete(problem.id, problem.completed)} />
+            problems.map((p) => (
+              <div key={p.id} style={{ display: 'grid', gridTemplateColumns: '60px 80px 1fr 120px 80px 80px', padding: '14px 20px', borderBottom: '1px solid var(--border-color)', alignItems: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <input
+                    type="checkbox"
+                    checked={p.completed}
+                    onChange={() => toggleComplete(p.id, p.completed)}
+                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: 'var(--primary)' }}
+                  />
                 </div>
-                <div style={{ color: '#8b949e', fontWeight: '600' }}>#{problem.problem_id}</div>
-                <div style={{ color: '#f0f6fc', fontWeight: '500' }}>{problem.title}</div>
+                <div style={{ color: 'var(--text-dim)', fontSize: '0.85rem', fontWeight: 600 }}>#{p.problem_id}</div>
+                <div style={{ color: p.completed ? 'var(--text-muted)' : '#fff', textDecoration: p.completed ? 'line-through' : 'none' }}>{p.title}</div>
                 <div>
-                  <span style={{ 
-                    color: problem.difficulty === 'Easy' ? '#3fb950' : problem.difficulty === 'Medium' ? '#d29922' : '#f85149',
-                    background: problem.difficulty === 'Easy' ? 'rgba(63, 185, 80, 0.1)' : problem.difficulty === 'Medium' ? 'rgba(210, 153, 34, 0.1)' : 'rgba(248, 81, 73, 0.1)',
-                    padding: '0.25rem 0.6rem',
-                    borderRadius: '12px',
-                    fontSize: '0.75rem',
-                    fontWeight: '600',
-                    border: `1px solid ${problem.difficulty === 'Easy' ? 'rgba(63, 185, 80, 0.2)' : problem.difficulty === 'Medium' ? 'rgba(210, 153, 34, 0.2)' : 'rgba(248, 81, 73, 0.2)'}`
-                  }}>
-                    {problem.difficulty}
+                  <span className={p.difficulty === 'Easy' ? 'badge-easy' : p.difficulty === 'Medium' ? 'badge-medium' : 'badge-hard'} style={{ padding: '4px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600 }}>
+                    {p.difficulty}
                   </span>
                 </div>
-                <div style={{ color: '#8b949e', fontSize: '0.85rem' }}>{problem.category || '-'}</div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <a href={problem.leetcode_url} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', transition: 'transform 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.2)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                    <Image src="/leetcode-icon.webp" alt="LeetCode" width={22} height={22} />
+                <div style={{ textAlign: 'center' }}>
+                  <a href={p.leetcode_url} target="_blank" rel="noopener noreferrer">
+                    <img src="/leetcode-icon.webp" alt="LeetCode" style={{ width: '20px', height: '20px' }} />
                   </a>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
-                  <button onClick={() => router.push(`/custom/${problem.id}`)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', filter: 'grayscale(1)', opacity: 0.7, transition: 'all 0.2s' }} onMouseEnter={(e) => {e.currentTarget.style.filter='grayscale(0)'; e.currentTarget.style.opacity='1';}} onMouseLeave={(e) => {e.currentTarget.style.filter='grayscale(1)'; e.currentTarget.style.opacity='0.7';}}>📝</button>
-                  <button onClick={() => deleteProblem(problem.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', filter: 'grayscale(1)', opacity: 0.7, transition: 'all 0.2s' }} onMouseEnter={(e) => {e.currentTarget.style.filter='grayscale(0)'; e.currentTarget.style.opacity='1';}} onMouseLeave={(e) => {e.currentTarget.style.filter='grayscale(1)'; e.currentTarget.style.opacity='0.7';}}>🗑️</button>
+                <div style={{ textAlign: 'center' }}>
+                  <button onClick={() => deleteProblem(p.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1rem' }}>🗑️</button>
                 </div>
-
               </div>
             ))
           )}
@@ -248,5 +222,3 @@ export default function CustomSheetPage() {
     </div>
   );
 }
-
-
