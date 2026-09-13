@@ -654,7 +654,11 @@ export default function Home() {
                   {/* Revisit Counter +1 Button with badge inside */}
                   <div style={{ textAlign: 'center' }}>
                     <button
-                      onClick={() => incrementRevision(problem.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        incrementRevision(problem.id);
+                      }}
                       className="saas-btn-secondary"
                       style={{ padding: '4px 10px', fontSize: '0.75rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                       title="Click to increment revisit count by 1"
@@ -669,7 +673,11 @@ export default function Home() {
                   {/* Pin / Unpin Button */}
                   <div style={{ textAlign: 'center' }}>
                     <button
-                      onClick={() => togglePin(problem.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        togglePin(problem.id);
+                      }}
                       style={{
                         background: isPinned[problem.id] ? 'var(--primary-light)' : 'transparent',
                         border: `1px solid ${isPinned[problem.id] ? 'var(--primary)' : 'var(--border-color)'}`,
