@@ -29,9 +29,17 @@ export async function GET(req: NextRequest) {
     .eq('user_id', user.id)
     .eq('company_name', company);
   
-  const completed = (progress || []).reduce((acc: any, p: any) => ({ ...acc, [p.problem_id]: p.completed }), {});
+  const completed: Record<string, boolean> = {};
+  const revisionCount: Record<string, number> = {};
+  const isPinned: Record<string, boolean> = {};
+
+  (progress || []).forEach((p: any) => {
+    completed[p.problem_id] = p.completed || false;
+    revisionCount[p.problem_id] = p.revision_count || 0;
+    isPinned[p.problem_id] = p.is_pinned || false;
+  });
   
-  return NextResponse.json({ problems, completed });
+  return NextResponse.json({ problems, completed, revisionCount, isPinned });
 }
 
 export async function POST(req: NextRequest) {
@@ -45,7 +53,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
   }
   
-  const { problemId, completed, company } = await req.json();
+  const { problemId, completed, revisionCount, isPinned, company } = await req.json();
   
   const { data: existing } = await supabase
     .from('user_progress')
@@ -55,17 +63,29 @@ export async function POST(req: NextRequest) {
     .eq('company_name', company)
     .single();
   
+  const updateData: any = {};
+  if (completed !== undefined) updateData.completed = completed;
+  if (revisionCount !== undefined) updateData.revision_count = revisionCount;
+  if (isPinned !== undefined) updateData.is_pinned = isPinned;
+
   if (existing) {
     await supabase
       .from('user_progress')
-      .update({ completed })
+      .update(updateData)
       .eq('user_id', user.id)
       .eq('problem_id', problemId)
       .eq('company_name', company);
   } else {
     await supabase
       .from('user_progress')
-      .insert({ user_id: user.id, problem_id: problemId, company_name: company, completed });
+      .insert({
+        user_id: user.id,
+        problem_id: problemId,
+        company_name: company,
+        completed: completed || false,
+        revision_count: revisionCount || 0,
+        is_pinned: isPinned || false
+      });
   }
   
   return NextResponse.json({ success: true });
