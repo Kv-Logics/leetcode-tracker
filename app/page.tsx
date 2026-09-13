@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Problem } from '@/lib/problems';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'sheets'>('sheets');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'sheets'>('dashboard');
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -291,8 +291,8 @@ export default function Home() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-main)', color: 'var(--text-main)', display: 'flex' }}>
       
-      {/* Sidebar Navigation */}
-      <div style={{ width: '68px', background: 'var(--bg-card)', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', zIndex: 100 }}>
+      {/* Fixed Constant Left Sidebar Navigation */}
+      <div style={{ width: '68px', position: 'fixed', top: 0, left: 0, height: '100vh', background: 'var(--bg-card)', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0', zIndex: 1000 }}>
         <div style={{ width: '40px', height: '40px', background: 'var(--primary)', borderRadius: '10px', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '24px' }}>
           ⚡
         </div>
@@ -319,7 +319,7 @@ export default function Home() {
       </div>
 
       {/* Main Content Workspace */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>
+      <div style={{ flex: 1, marginLeft: '68px', display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>
         
         {/* Navigation Bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
@@ -364,6 +364,18 @@ export default function Home() {
           </div>
           
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            {/* Logged-in User Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px', background: 'var(--bg-card)', borderRadius: '20px', border: '1px solid var(--border-color)', fontSize: '0.85rem', fontWeight: 600 }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--easy)' }}></span>
+              <span style={{ color: 'var(--text-muted)' }}>User:</span>
+              <span style={{ color: 'var(--text-main)', fontWeight: 700 }}>👤 {user?.username || 'User'}</span>
+              {user?.role === 'admin' && (
+                <span style={{ background: 'var(--primary-light)', color: 'var(--primary)', padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 800 }}>
+                  ADMIN
+                </span>
+              )}
+            </div>
+
             <button onClick={toggleTheme} className="theme-toggle-btn">
               {theme === 'dark' ? '🌙 Dark Mode' : '☀️ Light Mode'}
             </button>
