@@ -45,9 +45,9 @@ export async function GET(req: NextRequest) {
       };
     });
 
-    const totalProblemsAll = companies.reduce((sum, c) => sum + c.totalProblems, 0);
-    const totalCompletedAll = companies.reduce((sum, c) => sum + c.completedCount, 0);
-    const totalRevisionsAll = companies.reduce((sum, c) => sum + c.totalRevisions, 0);
+    const totalProblemsAll = companies.reduce((sum: number, c: any) => sum + c.totalProblems, 0);
+    const totalCompletedAll = companies.reduce((sum: number, c: any) => sum + c.completedCount, 0);
+    const totalRevisionsAll = companies.reduce((sum: number, c: any) => sum + c.totalRevisions, 0);
 
     // Fetch pinned questions for Revision Hub
     const pinnedItems = (progressData || []).filter((p: any) => p.is_pinned).map((p: any) => ({
