@@ -33,7 +33,10 @@ export default function Home() {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     const savedTheme = (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
+    const savedTab = (localStorage.getItem('activeTab') as 'dashboard' | 'sheets') || 'dashboard';
+    
     setTheme(savedTheme);
+    setActiveTab(savedTab);
     document.documentElement.setAttribute('data-theme', savedTheme);
 
     if (savedToken && savedUser) {
@@ -43,6 +46,11 @@ export default function Home() {
       fetchDashboard(savedToken);
     }
   }, []);
+
+  const changeTab = (tab: 'dashboard' | 'sheets') => {
+    setActiveTab(tab);
+    localStorage.setItem('activeTab', tab);
+  };
 
   const toggleTheme = () => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
@@ -298,14 +306,14 @@ export default function Home() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
           <button 
-            onClick={() => setActiveTab('dashboard')} 
+            onClick={() => changeTab('dashboard')} 
             style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: activeTab === 'dashboard' ? 'var(--primary-light)' : 'transparent', color: activeTab === 'dashboard' ? 'var(--primary)' : 'var(--text-muted)', cursor: 'pointer', fontSize: '18px' }} 
             title="Main Overview Dashboard"
           >
             📊
           </button>
           <button 
-            onClick={() => setActiveTab('sheets')} 
+            onClick={() => changeTab('sheets')} 
             style={{ width: '40px', height: '40px', borderRadius: '10px', border: 'none', background: activeTab === 'sheets' ? 'var(--primary-light)' : 'transparent', color: activeTab === 'sheets' ? 'var(--primary)' : 'var(--text-muted)', cursor: 'pointer', fontSize: '18px' }} 
             title="Company Problem Sheets"
           >
@@ -330,7 +338,7 @@ export default function Home() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '6px' }}>
               <div style={{ display: 'flex', background: 'var(--bg-card)', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
                 <button
-                  onClick={() => setActiveTab('dashboard')}
+                  onClick={() => changeTab('dashboard')}
                   style={{
                     padding: '6px 14px',
                     borderRadius: '8px',
@@ -345,7 +353,7 @@ export default function Home() {
                   📊 Master Dashboard
                 </button>
                 <button
-                  onClick={() => setActiveTab('sheets')}
+                  onClick={() => changeTab('sheets')}
                   style={{
                     padding: '6px 14px',
                     borderRadius: '8px',
@@ -480,7 +488,7 @@ export default function Home() {
                     <button
                       onClick={() => {
                         setSelectedCompany(comp.name);
-                        setActiveTab('sheets');
+                        changeTab('sheets');
                       }}
                       className="saas-btn-primary"
                       style={{ padding: '6px 12px', fontSize: '0.8rem' }}
@@ -508,7 +516,7 @@ export default function Home() {
                       <button
                         onClick={() => {
                           setSelectedCompany(item.companyName);
-                          setActiveTab('sheets');
+                          changeTab('sheets');
                         }}
                         className="saas-btn-secondary"
                         style={{ padding: '4px 8px', fontSize: '0.75rem' }}
@@ -541,7 +549,7 @@ export default function Home() {
                       border: 'none',
                       background: difficultyFilter === diff ? 'var(--primary-light)' : 'transparent',
                       color: difficultyFilter === diff ? 'var(--primary)' : 'var(--text-muted)',
-                      fontWeight: difficultyFilter === diff ? 700 : 500,
+                      fontWeight: 700,
                       fontSize: '0.85rem',
                       cursor: 'pointer'
                     }}

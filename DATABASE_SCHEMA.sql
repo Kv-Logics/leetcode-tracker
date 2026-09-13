@@ -26,9 +26,14 @@ CREATE TABLE IF NOT EXISTS user_progress (
   problem_id TEXT NOT NULL,
   company_name TEXT NOT NULL,
   completed BOOLEAN DEFAULT false,
+  revision_count INT DEFAULT 0,
+  is_pinned BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   UNIQUE(user_id, problem_id, company_name)
 );
+
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS revision_count INT DEFAULT 0;
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS is_pinned BOOLEAN DEFAULT false;
 
 -- 4. Bookmarks table
 CREATE TABLE IF NOT EXISTS bookmarks (
