@@ -96,15 +96,23 @@ export default function CustomSheetPage() {
   };
 
   const toggleComplete = async (id: string, completed: boolean) => {
-    await fetch('/api/custom-problems', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ id, completed: !completed })
-    });
-    fetchProblems(token);
+    // Optimistic state update for instant UI feedback
+    setProblems(prev => prev.map(p => p.id === id ? { ...p, completed: !completed } : p));
+
+    try {
+      await fetch('/api/custom-problems', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ id, completed: !completed })
+      });
+    } catch (error) {
+      console.error('Failed to sync custom problem toggle:', error);
+      // Rollback on failure
+      setProblems(prev => prev.map(p => p.id === id ? { ...p, completed } : p));
+    }
   };
 
   const completedCount = problems.filter(p => p.completed).length;

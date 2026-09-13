@@ -127,15 +127,23 @@ export default function Home() {
 
   const toggleProblem = async (problemId: string) => {
     const newStatus = !completed[problemId];
-    await fetch('/api/problems', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ problemId, completed: newStatus, company: selectedCompany })
-    });
-    setCompleted({ ...completed, [problemId]: newStatus });
+    // Optimistic UI update for zero lag
+    setCompleted(prev => ({ ...prev, [problemId]: newStatus }));
+
+    try {
+      await fetch('/api/problems', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ problemId, completed: newStatus, company: selectedCompany })
+      });
+    } catch (error) {
+      console.error('Failed to sync toggle with server:', error);
+      // Rollback if request fails
+      setCompleted(prev => ({ ...prev, [problemId]: !newStatus }));
+    }
   };
 
   const logout = () => {
