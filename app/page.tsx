@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Problem } from '@/lib/problems';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'sheets'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'sheets'>('sheets');
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
