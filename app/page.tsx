@@ -145,9 +145,9 @@ export default function Home() {
     const data = await res.json();
     const companyNames = data.companies.map((c: any) => c.name);
     setCompanies(companyNames.length > 0 ? companyNames : ['PayPal']);
-    if (companyNames.length > 0 && !selectedCompany) {
-      setSelectedCompany(companyNames[0]);
-    }
+    const targetCompany = companyNames.length > 0 ? companyNames[0] : 'PayPal';
+    setSelectedCompany(targetCompany);
+    fetchProblems(authToken, targetCompany);
   };
 
   const fetchProblems = async (authToken: string, company: string) => {
